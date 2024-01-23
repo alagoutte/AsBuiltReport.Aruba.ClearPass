@@ -24,7 +24,6 @@ function Get-AbrCPPMService {
     }
 
     process {
-        PageBreak
         Section -Style Heading2 'Service' {
             Paragraph "The following section details Service settings configured on FortiGate."
             BlankLine
@@ -234,7 +233,7 @@ function Get-AbrCPPMService {
                                 }
 
                                 $TableParams = @{
-                                    Name         = "Enforcement Policy:: $($policy.name)"
+                                    Name         = "Enforcement Policy: $($policy.name)"
                                     List         = $true
                                     ColumnWidths = 20, 80
                                 }
@@ -254,7 +253,7 @@ function Get-AbrCPPMService {
                                             if ($conditions) {
                                                 $conditions += " AND "
                                             }
-                                            $conditions += "$($condition.name) $($condition.oper) $($condition.value)"
+                                            $conditions += "($($condition.name) $($condition.oper) $($condition.value))"
                                         }
                                         $OutObj += [pscustomobject]@{
                                             "Condition"            = $conditions
