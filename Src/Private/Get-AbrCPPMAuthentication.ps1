@@ -108,7 +108,7 @@ function Get-AbrCPPMAuthentication {
                     $TableParams = @{
                         Name         = "Authentication Source"
                         List         = $false
-                        ColumnWidths = 10, 25, 25, 10, 30
+                        ColumnWidths = 8, 35, 37, 10, 10
                     }
 
                     if ($Report.ShowTableCaptions) {
