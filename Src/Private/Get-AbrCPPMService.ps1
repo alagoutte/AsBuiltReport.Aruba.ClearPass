@@ -33,6 +33,7 @@ function Get-AbrCPPMService {
             if ( $defaultArubaCPConnection.version -gt [version]"6.11.0") {
                 $enf_policy = Get-ArubaCPEnforcementPolicy -limit 1000
                 $enf_profile = Get-ArubaCPEnforcementProfile -limit 1000
+                $role = Get-ArubaCPRole -limit 1000
                 $role_mapping_policy = (Invoke-ArubaCPRestMethod api/role-mapping -limit 1000)._embedded.items
             }
 
@@ -401,6 +402,36 @@ function Get-AbrCPPMService {
                     }
                 }
 
+            }
+
+            if ($role -and $InfoLevel.service -ge 1) {
+                Section -Style Heading3 'Role' {
+                    Paragraph "The following section details Role configured on ClearPass."
+                    BlankLine
+
+                    $OutObj = @()
+                    foreach ($rl in $role) {
+                        $OutObj += [pscustomobject]@{
+                            "Id"          = $rl.id
+                            "Name"        = $rl.name
+                            "Description" = $rl.description
+                            "Ref"         = @($role_mapping_policy.rules | Where-Object { $_.role_name -eq $rl.name }).count
+                        }
+                    }
+
+                    $TableParams = @{
+                        Name         = "Role"
+                        List         = $false
+                        ColumnWidths = 7, 30, 56, 7
+                    }
+
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+
+                    $OutObj | Table @TableParams
+
+                }
             }
 
             if ($role_mapping_policy -and $InfoLevel.service -ge 1) {
